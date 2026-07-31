@@ -1,0 +1,1150 @@
+/* ==========================================================================
+   Ghost Commit — crypto-lab
+   Dark is the default. The shared top bar owns the theme toggle; this sheet
+   only reacts to [data-theme] on <html>.
+
+   Every color token below was contrast-checked against the surface it sits on
+   before it was written: body text >= 4.5:1, UI/graphical marks >= 3:1, in
+   BOTH themes. Muted text is a darker/lighter *color*, never opacity.
+   ========================================================================== */
+
+:root {
+  color-scheme: dark;
+
+  --bg: #0e1116;
+  --surface: #161b23;
+  --surface-2: #1c222c;
+  --border: #2a3340;
+  --border-strong: #63728a;
+
+  --text: #e8ecf2;
+  --text-dim: #a3adbd;
+  --muted: #708093;
+
+  --accent: #9085e9;
+  --ink-on-accent: #101018;
+
+  --alarm: #ff6b6b;
+  --ink-on-alarm: #2a0b0b;
+  --safe: #3ddc97;
+  --ink-on-safe: #05231a;
+  --warn: #f2b43c;
+  --ink-on-warn: #2a1c00;
+  --info: #6fb4ff;
+
+  --chart-1: #3987e5;
+  --chart-muted: #708093;
+
+  --radius: 10px;
+  --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --surface-2: #eef1f5;
+  --border: #c9d1dc;
+  --border-strong: #6e7c94;
+
+  --text: #10141a;
+  --text-dim: #4a5464;
+  --muted: #6b7280;
+
+  --accent: #4a3aa7;
+  --ink-on-accent: #ffffff;
+
+  --alarm: #c02626;
+  --ink-on-alarm: #ffffff;
+  --safe: #0a6b40;
+  --ink-on-safe: #ffffff;
+  --warn: #8a5a00;
+  --ink-on-warn: #ffffff;
+  --info: #1c5cab;
+
+  --chart-1: #2a78d6;
+  --chart-muted: #6b7280;
+}
+
+/* The longhand matters — axe and WebKit both miss the `background` shorthand. */
+html {
+  background-color: var(--bg);
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  line-height: 1.55;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Scoped rather than global: the shared top bar ships self-contained styles and
+   the template is explicit that a lab's base rules must not reach into it. */
+#app,
+#app *,
+#app *::before,
+#app *::after {
+  box-sizing: border-box;
+}
+
+#app {
+  max-width: 74rem;
+  margin: 0 auto;
+  padding: 0 clamp(0.9rem, 3vw, 2rem) 3rem;
+}
+
+/* Scoped to #app so nothing here fights the always-dark shared top bar. */
+#app p {
+  margin: 0 0 0.85rem;
+}
+#app h2 {
+  font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+  margin: 0 0 0.35rem;
+  letter-spacing: 0.01em;
+}
+#app h3 {
+  font-size: 1.02rem;
+  margin: 1.1rem 0 0.5rem;
+}
+#app h4 {
+  font-size: 0.95rem;
+  margin: 0 0 0.4rem;
+}
+#app a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+#app code {
+  font-family: var(--mono);
+  font-size: 0.88em;
+}
+
+.muted {
+  color: var(--text-dim);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+:where(#app) :focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* BEGIN cl-hero standard — managed, keep in sync across fleet */
+.cl-hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: clamp(1rem, 4vw, 3rem);
+  flex-wrap: wrap;
+  margin: clamp(1rem, 3vw, 2rem) 0 1.5rem;
+}
+.cl-hero-main {
+  flex: 1 1 22rem;
+  min-width: min(100%, 20rem);
+}
+.cl-hero-title {
+  margin: 0;
+  font-size: clamp(1.6rem, 3.8vw, 2.7rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+}
+.cl-hero-sub {
+  margin: 0.4rem 0 0;
+  font-size: clamp(0.9rem, 1.6vw, 1.05rem);
+  letter-spacing: 0.01em;
+  color: var(--text-dim);
+}
+.cl-hero-desc {
+  margin: 0.55rem 0 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--text-dim);
+  max-width: 60ch;
+}
+.cl-hero-why {
+  flex: 0 1 min(40%, 26rem);
+  min-width: min(100%, 15rem);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.85rem 1.05rem;
+  background: color-mix(in oklab, var(--accent) 6%, transparent);
+}
+.cl-hero-why-label {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+}
+.cl-hero-why-text {
+  margin: 0.35rem 0 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+@media (max-width: 640px) {
+  .cl-hero {
+    flex-direction: column;
+  }
+  .cl-hero-why {
+    flex-basis: auto;
+    width: 100%;
+  }
+}
+/* END cl-hero standard */
+
+/* ---------- panels ---------- */
+
+.panel {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: clamp(1rem, 2.5vw, 1.6rem);
+  margin: 0 0 1.4rem;
+}
+
+.panel-head {
+  margin-bottom: 1rem;
+}
+.panel-lede {
+  color: var(--text-dim);
+  max-width: 78ch;
+}
+
+.intro-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: clamp(1rem, 3vw, 2rem);
+}
+.scope-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background-color: var(--surface-2);
+  padding: 0.9rem 1.1rem;
+}
+.scope-card h3 {
+  margin-top: 0;
+}
+.scope-list,
+.limits-list {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+.scope-list li,
+.limits-list li {
+  margin-bottom: 0.6rem;
+  color: var(--text-dim);
+}
+.scope-list strong,
+.limits-list strong {
+  color: var(--text);
+}
+
+/* ---------- controls ---------- */
+
+#app button {
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1.3;
+  padding: 0.55rem 0.95rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-strong);
+  background-color: var(--surface-2);
+  color: var(--text);
+  cursor: pointer;
+}
+#app button:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+#app button:disabled {
+  cursor: not-allowed;
+  color: var(--text-dim);
+}
+
+#app button.primary {
+  background-color: var(--accent);
+  color: var(--ink-on-accent);
+  border-color: var(--accent);
+  font-weight: 600;
+}
+#app button.primary:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+#app button.primary:disabled {
+  background-color: var(--surface-2);
+  color: var(--text-dim);
+  border-color: var(--border-strong);
+}
+#app button.primary.tone-leak {
+  background-color: var(--alarm);
+  color: var(--ink-on-alarm);
+  border-color: var(--alarm);
+}
+#app button.primary.tone-fix {
+  background-color: var(--safe);
+  color: var(--ink-on-safe);
+  border-color: var(--safe);
+}
+#app button.ghost {
+  background-color: transparent;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+.next-step {
+  flex: 1 1 100%;
+}
+.next-expect {
+  margin: 0 0 0.2rem;
+  color: var(--text-dim);
+  max-width: 78ch;
+}
+
+.field {
+  margin-top: 1rem;
+}
+.field label,
+.field-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 0.35rem;
+}
+.field-hint {
+  margin: 0.35rem 0 0;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  max-width: 70ch;
+}
+
+.text-input,
+.select {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  width: 100%;
+  max-width: 44rem;
+  padding: 0.5rem 0.7rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-strong);
+  background-color: var(--surface-2);
+  color: var(--text);
+}
+.select {
+  font-family: var(--sans);
+  max-width: 26rem;
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) calc(50% + 2px),
+    calc(100% - 13px) calc(50% + 2px);
+  background-size:
+    5px 5px,
+    5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 2.2rem;
+}
+
+.pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+#app button.pill {
+  font-size: 0.82rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+}
+#app button.pill.is-active {
+  background-color: var(--accent);
+  color: var(--ink-on-accent);
+  border-color: var(--accent);
+}
+
+/* ---------- chips & notes ---------- */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  white-space: nowrap;
+  max-width: 100%;
+}
+@media (max-width: 700px) {
+  /* A long chip label is allowed to wrap rather than set the page's scroll width. */
+  .chip {
+    white-space: normal;
+    align-items: flex-start;
+  }
+}
+.chip-icon {
+  font-weight: 900;
+}
+.chip-alarm {
+  color: var(--alarm);
+}
+.chip-safe {
+  color: var(--safe);
+}
+.chip-warn {
+  color: var(--warn);
+}
+.chip-info {
+  color: var(--info);
+}
+.chip-neutral {
+  color: var(--text-dim);
+}
+
+.note {
+  border-left: 3px solid var(--border-strong);
+  padding: 0.5rem 0.8rem;
+  margin: 0.8rem 0 0;
+  background-color: var(--surface-2);
+  border-radius: 0 8px 8px 0;
+  color: var(--text-dim);
+}
+.note-warn {
+  border-left-color: var(--warn);
+}
+.note-info {
+  border-left-color: var(--info);
+}
+.note-done {
+  border-left-color: var(--safe);
+}
+
+.callout {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.85rem 1.05rem;
+  margin-top: 1rem;
+  background-color: var(--surface-2);
+}
+.callout-warn {
+  border-left: 4px solid var(--warn);
+}
+.callout-safe {
+  border-left: 4px solid var(--safe);
+}
+.callout p:last-child {
+  margin-bottom: 0;
+}
+
+.ordered {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: var(--text-dim);
+}
+.ordered li {
+  margin-bottom: 0.35rem;
+}
+
+/* ---------- repository panel ---------- */
+
+.progress-line {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  margin-bottom: 0.9rem;
+}
+.progress-track {
+  flex: 1 1 8rem;
+  height: 6px;
+  border-radius: 3px;
+  background-color: var(--surface-2);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.progress-fill {
+  display: block;
+  height: 100%;
+  background-color: var(--accent);
+}
+
+.repo-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
+  gap: clamp(1rem, 2.5vw, 1.8rem);
+}
+.repo-col {
+  min-width: 0;
+}
+.repo-col h3 {
+  margin-top: 0;
+}
+
+.commit-scroll,
+.code-block,
+.object-scroll,
+.table-scroll {
+  max-height: 26rem;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background-color: var(--surface-2);
+}
+.commit-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.4rem;
+}
+#app button.commit-row {
+  display: flex;
+  gap: 0.6rem;
+  width: 100%;
+  text-align: left;
+  align-items: flex-start;
+  background-color: transparent;
+  border-color: transparent;
+  padding: 0.5rem 0.6rem;
+}
+#app button.commit-row.is-selected {
+  border-color: var(--accent);
+  background-color: color-mix(in oklab, var(--accent) 14%, transparent);
+}
+#app button.commit-row.is-tainted {
+  border-left: 3px solid var(--alarm);
+}
+.commit-dot {
+  width: 9px;
+  height: 9px;
+  margin-top: 0.4rem;
+  border-radius: 50%;
+  background-color: var(--muted);
+  flex: 0 0 auto;
+}
+.is-tainted .commit-dot {
+  background-color: var(--alarm);
+}
+.commit-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+.commit-line {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.commit-msg {
+  font-size: 0.86rem;
+  color: var(--text-dim);
+}
+.commit-flag {
+  margin-top: 0.15rem;
+}
+.head-tag {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  padding: 0.05rem 0.35rem;
+  border-radius: 4px;
+  background-color: var(--accent);
+  color: var(--ink-on-accent);
+}
+
+.oid {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  color: var(--text);
+  background-color: color-mix(in oklab, var(--border) 55%, transparent);
+  padding: 0.05rem 0.3rem;
+  border-radius: 4px;
+}
+
+.meta-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.2rem;
+  margin-bottom: 0.7rem;
+}
+.meta-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.meta-label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.meta-value {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+.file-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.5rem;
+}
+#app button.file-tab {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  padding: 0.3rem 0.6rem;
+}
+#app button.file-tab.is-active {
+  border-color: var(--accent);
+  background-color: color-mix(in oklab, var(--accent) 16%, transparent);
+}
+
+.code-block {
+  padding: 0.6rem 0.2rem;
+}
+.code-row {
+  display: flex;
+  gap: 0.7rem;
+  padding: 0 0.6rem;
+}
+.line-no {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+  min-width: 1.6rem;
+  text-align: right;
+  user-select: none;
+}
+.code-line {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  white-space: pre;
+  color: var(--text);
+}
+.secret-mark {
+  background-color: var(--alarm);
+  color: var(--ink-on-alarm);
+  padding: 0 0.15rem;
+  border-radius: 3px;
+  font-weight: 700;
+}
+
+/* ---------- scan panel ---------- */
+
+.compare-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 2.5vw, 1.6rem);
+  margin-top: 1rem;
+}
+.report-block {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.9rem 1.05rem;
+  background-color: var(--surface-2);
+  min-width: 0;
+}
+.report-block h3 {
+  margin-top: 0;
+  font-family: var(--mono);
+  font-size: 0.9rem;
+}
+
+.stat-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  margin-bottom: 0.8rem;
+}
+.stat {
+  display: flex;
+  flex-direction: column;
+}
+.stat-value {
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+.stat-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.verdict {
+  margin-bottom: 0.7rem;
+}
+.verdict-clean p {
+  margin: 0.4rem 0 0;
+  color: var(--text-dim);
+  font-size: 0.88rem;
+}
+
+.finding {
+  border: 1px solid var(--alarm);
+  border-radius: 8px;
+  padding: 0.7rem 0.85rem;
+  margin-top: 0.7rem;
+  background-color: var(--surface);
+}
+.finding.is-revoked {
+  border-color: var(--safe);
+}
+.finding-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 0.5rem;
+}
+.finding-head h4 {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+}
+.finding-code {
+  overflow-x: auto;
+  padding: 0.4rem 0.5rem;
+  background-color: var(--surface-2);
+  border-radius: 6px;
+  margin-bottom: 0.55rem;
+}
+
+.finding-facts {
+  display: grid;
+  grid-template-columns: minmax(7rem, auto) minmax(0, 1fr);
+  gap: 0.25rem 0.8rem;
+  margin: 0;
+  font-size: 0.86rem;
+}
+.finding-facts dt {
+  font-weight: 700;
+  color: var(--text-dim);
+}
+.finding-facts dd {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.rule-tag {
+  display: inline-block;
+  font-size: 0.75rem;
+  padding: 0.1rem 0.4rem;
+  margin: 0 0.3rem 0.2rem 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+}
+.commit-ref {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--text-dim);
+}
+
+.reveal {
+  margin-top: 1.2rem;
+  border: 1px solid var(--alarm);
+  border-left-width: 4px;
+  border-radius: var(--radius);
+  padding: 0.95rem 1.15rem;
+  background-color: color-mix(in oklab, var(--alarm) 8%, var(--surface-2));
+}
+.reveal h3 {
+  margin-top: 0;
+  color: var(--alarm);
+}
+
+/* ---------- entropy panel ---------- */
+
+.picker {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(1rem, 2.5vw, 1.8rem);
+  align-items: start;
+}
+.entropy-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: clamp(1rem, 2.5vw, 1.8rem);
+  margin-top: 1.2rem;
+  align-items: start;
+}
+.formula {
+  margin: 0 0 0.4rem;
+}
+.formula-math {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 1.05rem;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background-color: var(--surface-2);
+}
+.verdict-block {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.85rem 1rem;
+  background-color: var(--surface-2);
+}
+.verdict-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.7rem;
+}
+.chart-block {
+  margin-top: 1.4rem;
+}
+
+/* ---------- tables & bars ---------- */
+
+/* Wide tables scroll inside their own box; the page body never pans sideways. */
+.table-x {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+}
+.data-table caption {
+  text-align: left;
+  color: var(--text-dim);
+  font-size: 0.82rem;
+  padding-bottom: 0.5rem;
+}
+.data-table th,
+.data-table td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.4rem 0.55rem;
+  border-bottom: 1px solid var(--border);
+}
+.data-table thead th {
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--border-strong);
+}
+.data-table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-family: var(--mono);
+}
+.data-table tfoot th,
+.data-table tfoot td {
+  border-bottom: none;
+  border-top: 1px solid var(--border-strong);
+  font-weight: 700;
+}
+.total-cell {
+  font-family: var(--mono);
+  color: var(--accent);
+}
+.char-cell {
+  display: inline-block;
+  min-width: 1.3rem;
+  padding: 0.05rem 0.25rem;
+  text-align: center;
+  background-color: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.contrib-scroll {
+  max-height: 24rem;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background-color: var(--surface-2);
+  padding: 0 0.6rem 0.2rem;
+  max-width: 36rem;
+}
+.contrib-table {
+  width: 100%;
+}
+/* Header and total stay put while the rows scroll — the point of the table is
+   watching the contributions add up to the figure in the footer. */
+.contrib-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: var(--surface-2);
+}
+.contrib-table tfoot th,
+.contrib-table tfoot td {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  background-color: var(--surface-2);
+}
+.contrib-table caption {
+  padding-top: 0.5rem;
+}
+
+/* Bars: one hue for magnitude; the alarm hue only for a flagged row (emphasis),
+   never as a second category. A 4px rounded data-end anchored to the baseline. */
+.bar-cell {
+  min-width: 9rem;
+}
+.bar-cell.wide {
+  min-width: 14rem;
+}
+.bar-track {
+  position: relative;
+  display: block;
+  height: 10px;
+  border-radius: 2px;
+  background-color: color-mix(in oklab, var(--border) 70%, transparent);
+  margin-bottom: 0.2rem;
+}
+.bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 0 4px 4px 0;
+  min-width: 2px;
+}
+.bar-accent {
+  background-color: var(--chart-1);
+}
+.bar-alarm {
+  background-color: var(--alarm);
+}
+.bar-muted {
+  background-color: var(--chart-muted);
+}
+.bar-threshold {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 2px;
+  background-color: var(--text);
+}
+.bar-value {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+}
+.bar-sub {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+.row-label {
+  display: block;
+  font-weight: 600;
+}
+.row-tag {
+  display: inline-block;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.row-note {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  max-width: 42ch;
+  margin-top: 0.15rem;
+}
+.row-cmd {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  color: var(--text-dim);
+  margin-top: 0.15rem;
+}
+.entropy-table th[scope='row'] {
+  max-width: 22rem;
+}
+.is-repo-row {
+  background-color: color-mix(in oklab, var(--accent) 8%, transparent);
+}
+
+/* Purposeful motion only: rows stagger in as the sum is (re)computed, so the
+   total visibly accumulates. Nothing here loops or idles. */
+@media (prefers-reduced-motion: no-preference) {
+  .contrib-row {
+    animation: row-in 260ms ease-out both;
+    animation-delay: calc(var(--row-index, 0) * 28ms);
+  }
+  @keyframes row-in {
+    from {
+      opacity: 0;
+      transform: translateY(-3px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* ---------- fix panel ---------- */
+
+.fix-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: clamp(1rem, 2.5vw, 1.8rem);
+  align-items: start;
+  margin-bottom: 1.2rem;
+}
+.status-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.85rem 1rem;
+  background-color: var(--surface-2);
+}
+.status-card h3 {
+  margin-top: 0;
+}
+.status-row {
+  margin-bottom: 0.7rem;
+}
+.remedy-table th[scope='row'] {
+  max-width: 16rem;
+}
+
+/* ---------- disclosure & glossary ---------- */
+
+.disclose {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.6rem 0.9rem;
+  margin-top: 1rem;
+  background-color: var(--surface-2);
+}
+.disclose > summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.disclose > summary:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+.disclose > *:not(summary) {
+  margin-top: 0.7rem;
+}
+
+.glossary {
+  margin: 0;
+  display: grid;
+  grid-template-columns: minmax(7rem, auto) minmax(0, 1fr);
+  gap: 0.3rem 1rem;
+}
+.glossary dt {
+  font-weight: 700;
+}
+.glossary dd {
+  margin: 0;
+  color: var(--text-dim);
+}
+
+.verify-block {
+  overflow-x: auto;
+  padding: 0.7rem 0.9rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.82rem;
+}
+.verify-block code {
+  font-family: var(--mono);
+  white-space: pre;
+}
+
+/* ---------- footer ---------- */
+
+.scripture-footer {
+  margin-top: 2rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.88rem;
+}
+.scripture-footer p {
+  margin: 0 0 0.5rem;
+}
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 960px) {
+  .intro-grid,
+  .repo-grid,
+  .compare-grid,
+  .entropy-grid,
+  .picker,
+  .fix-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .finding-facts,
+  .glossary {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .finding-facts dt,
+  .glossary dt {
+    margin-top: 0.4rem;
+  }
+  .data-table {
+    font-size: 0.8rem;
+  }
+  /* Inside .table-x these set the scroll width, not the page width. Keeping the
+     bar and its labels legible beats squeezing the table into 390px. */
+  .entropy-table,
+  .remedy-table,
+  .rules-table {
+    min-width: 34rem;
+  }
+  .entropy-table th[scope='row'],
+  .remedy-table th[scope='row'] {
+    max-width: 14rem;
+  }
+  .row-note {
+    max-width: none;
+  }
+  #app button {
+    max-width: 100%;
+  }
+  .stat-row {
+    gap: 0.7rem;
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "crypto-lab-ghost-commit",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Commit a secret, delete it, and watch git history keep it forever — with real git object hashing and real Shannon-entropy detection, in the browser.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:a11y": "playwright test",
+    "shots": "SHOTS=1 playwright test e2e/shots.spec.ts",
+    "kat:regen": "node tools/gen-git-kat.ts"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.1",
+    "@playwright/test": "^1.61.1",
+    "@types/node": "^24.13.3",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.5",
+    "vitest": "^3.2.4"
+  }
+}
