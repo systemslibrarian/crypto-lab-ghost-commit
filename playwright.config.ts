@@ -18,7 +18,10 @@ export default defineConfig({
     colorScheme: 'dark', // scan the real dark default; the toggle reaches light
   },
   webServer: {
-    command: `npm run preview -- --port ${PORT} --strictPort`,
+    // Build first: `vite preview` only serves the existing dist/, so without
+    // this a broken build leaves the last good bundle in place and the suite
+    // passes green against source that no longer compiles.
+    command: `npm run build && npm run preview -- --port ${PORT} --strictPort`,
     url: BASE,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
