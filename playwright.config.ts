@@ -1,8 +1,8 @@
 import { defineConfig } from '@playwright/test'
 
-// Port 4287: unique to this lab so `reuseExistingServer` can never latch onto a
+// Port 4644: unique to this lab so `reuseExistingServer` can never latch onto a
 // sibling lab's preview when several are checked out side by side. Never 4173.
-const PORT = 4287
+const PORT = 4644
 const BASE = `http://localhost:${PORT}/crypto-lab-ghost-commit/`
 
 export default defineConfig({
