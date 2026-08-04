@@ -146,7 +146,8 @@ body {
   border-radius: 4px;
 }
 
-/* BEGIN cl-hero standard — managed, keep in sync across fleet */
+/* Hero. THIS LAB OWNS IT — kept consistent with the fleet by review, never by
+   a script. The old "managed, keep in sync" block was retired. */
 .cl-hero {
   display: flex;
   align-items: flex-start;
@@ -208,7 +209,6 @@ body {
     width: 100%;
   }
 }
-/* END cl-hero standard */
 
 /* ---------- panels ---------- */
 
