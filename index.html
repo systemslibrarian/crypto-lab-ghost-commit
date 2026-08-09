@@ -328,7 +328,18 @@
               Nothing here needs to be taken on trust. Reproduce any object id on this page with the
               real thing:
             </p>
-            <pre class="verify-block"><code>git init --object-format=sha1 demo &amp;&amp; cd demo
+            <!-- `overflow-x: auto` plus `white-space: pre` makes this a real
+                 scroller below ~500px, and a scrolling region with no focusable
+                 content inside it is unreachable from the keyboard (WCAG 2.1.1).
+                 `tabindex="0"` makes it a focus target the arrow keys can then
+                 pan; the role/label pair matches what `scrollRegion()` gives
+                 every scroller the TypeScript side builds. -->
+            <pre
+              class="verify-block"
+              tabindex="0"
+              role="group"
+              aria-label="Commands to reproduce these object ids"
+            ><code>git init --object-format=sha1 demo &amp;&amp; cd demo
 printf 'hello world\n' | git hash-object --stdin
 # 3b18e512dba79e4c8300dd08aeb37f8e728b8dad
 

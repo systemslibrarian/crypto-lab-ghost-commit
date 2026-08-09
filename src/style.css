@@ -3,9 +3,22 @@
    Dark is the default. The shared top bar owns the theme toggle; this sheet
    only reacts to [data-theme] on <html>.
 
-   Every color token below was contrast-checked against the surface it sits on
-   before it was written: body text >= 4.5:1, UI/graphical marks >= 3:1, in
-   BOTH themes. Muted text is a darker/lighter *color*, never opacity.
+   Muted text is a darker/lighter *color*, never opacity.
+
+   On contrast: this header used to assert that every token had been checked at
+   >= 4.5:1 for text and >= 3:1 for UI and graphical marks, in both themes. It
+   had not been, and a comment is not a measurement. Four ratios were under the
+   floor when that claim was audited against real screenshot pixels — see the
+   notes on --muted, --alarm (light) and .bar-threshold for what each was and
+   what it is now.
+
+   What IS true, and is what the claim should have said: `e2e/a11y.spec.ts`
+   walks this page in four configurations and asserts a composite-aware 1.4.3
+   ratio on every text-owning element in every state. That covers text. It does
+   NOT cover 1.4.11 non-text contrast (no oracle in this fleet computes it) or
+   anything an oracle is told to skip — `aria-hidden` subtrees, disabled
+   controls, and generated content. Those are hand-measured, and the three
+   token notes below record the numbers.
    ========================================================================== */
 
 :root {
@@ -19,7 +32,15 @@
 
   --text: #e8ecf2;
   --text-dim: #a3adbd;
-  --muted: #708093;
+  /* The dimmest ink tier, and the one that carries `.line-no`. It was #708093,
+     which is 3.95:1 on --surface-2 — under the 4.5:1 body-text floor. Nothing
+     caught it, because `.line-no` is `aria-hidden` (a decorative gutter, which
+     is the right call for a screen reader) and BOTH contrast oracles honour
+     `aria-hidden`: axe's color-contrast rule skips it and so does the gate's
+     arithmetic walk. `aria-hidden` removes text from the accessibility tree,
+     not from the screen, and 1.4.3 is about the screen. Measured from real
+     pixels at 4.86:1. */
+  --muted: #808fa4;
 
   --accent: #9085e9;
   --ink-on-accent: #101018;
@@ -51,12 +72,20 @@
 
   --text: #10141a;
   --text-dim: #4a5464;
-  --muted: #6b7280;
+  /* See the dark-theme note: #6b7280 measured 4.27:1 on --surface-2. 4.94:1. */
+  --muted: #636876;
 
   --accent: #4a3aa7;
   --ink-on-accent: #ffffff;
 
-  --alarm: #c02626;
+  /* Was #c02626, which clears 4.5:1 on every FLAT surface here (5.28:1 on
+     --surface-2) and fails on the tinted ones: a `.chip-alarm` label inside a
+     selected `.commit-row` sits on `color-mix(in oklab, var(--accent) 14%,
+     transparent)` over --surface-2 — rgb(214, 215, 234) in real pixels — where
+     it measured 4.17:1. The ink had been checked against the surface it was
+     named for rather than against the deepest surface it actually lands on.
+     4.71:1 there now, and it only improves everywhere else. */
+  --alarm: #b31f1f;
   --ink-on-alarm: #ffffff;
   --safe: #0a6b40;
   --ink-on-safe: #ffffff;
@@ -287,11 +316,6 @@ body {
 #app button.primary:hover:not(:disabled) {
   filter: brightness(1.08);
 }
-#app button.primary:disabled {
-  background-color: var(--surface-2);
-  color: var(--text-dim);
-  border-color: var(--border-strong);
-}
 #app button.primary.tone-leak {
   background-color: var(--alarm);
   color: var(--ink-on-alarm);
@@ -301,6 +325,17 @@ body {
   background-color: var(--safe);
   color: var(--ink-on-safe);
   border-color: var(--safe);
+}
+/* AFTER the tone rules, not before. `#app button.primary:disabled` and
+   `#app button.primary.tone-fix` have identical specificity (1, 2, 1), so
+   source order decides — and written first, the disabled style lost to the tone
+   style on the only button in this lab that ever becomes disabled. The rotate
+   button kept its full green fill after rotation and the intended greyed-out
+   state never rendered once. */
+#app button.primary:disabled {
+  background-color: var(--surface-2);
+  color: var(--text-dim);
+  border-color: var(--border-strong);
 }
 #app button.ghost {
   background-color: transparent;
@@ -945,12 +980,23 @@ body {
 .bar-muted {
   background-color: var(--chart-muted);
 }
+/* The threshold marker is a graphical object under WCAG 1.4.11: it is the mark
+   the eye compares each bar against. `--text` alone contrasts with the empty
+   track (11.6:1) and NOT with a filled bar it crosses — measured from real
+   pixels at 2.34:1 over `.bar-alarm` in the dark theme, and 3.12:1 in light,
+   which is a hair over the floor rather than a margin. Neither oracle can see
+   this: axe and the arithmetic walk both operate on TEXT, and this element has
+   none. The page-ground halo gives the marker a boundary against any fill it
+   is drawn over (6.82:1 over `.bar-alarm`, 4.71:1 over `.bar-muted`, 5.25:1
+   over `.bar-accent` in dark; 6.27 / 4.52 / 4.13 in light) while leaving the
+   marker itself legible against the track. */
 .bar-threshold {
   position: absolute;
   top: -3px;
   bottom: -3px;
   width: 2px;
   background-color: var(--text);
+  box-shadow: 0 0 0 1px var(--bg);
 }
 .bar-value {
   display: block;
