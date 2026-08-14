@@ -28,7 +28,7 @@
  *    keyboard-reachable scrollers, and no arithmetic contrast check at all.
  */
 import { test } from '@playwright/test';
-import { NARROW, boot, driveAllStates, reportCollected } from './gate';
+import { NARROW, boot, driveAllStates, expectBaselineNotStale, reportCollected } from './gate';
 
 test.describe.configure({ mode: 'default' });
 
@@ -48,6 +48,18 @@ for (const theme of ['dark', 'light'] as const) {
     await page.setViewportSize({ width: 1280, height: 900 });
     await boot(page, theme);
     await driveAllStates(page, `${theme} 1280`);
+
+    // The third ratchet rule — a baselined finding that no longer appears must
+    // be deleted, so the list can only shrink toward empty.
+    // `expectBaselineNotStale` was exported from `gate.ts` and imported by
+    // nothing, so it had never run and the baseline could only grow.
+    //
+    // Called in all four configurations, which this lab's baseline permits: all
+    // four entries are produced by all four drives, confirmed through the
+    // gate's own capture path rather than assumed. (Sibling labs do not have
+    // that luxury — an accent-bordered control fails in one theme only, and
+    // there the check has to be scoped to the drive that sees it.)
+    expectBaselineNotStale();
   });
 
   test(`WCAG A/AA — ${theme}, ${NARROW.width}px`, async ({ page }) => {
@@ -55,5 +67,6 @@ for (const theme of ['dark', 'light'] as const) {
     await page.setViewportSize(NARROW);
     await boot(page, theme);
     await driveAllStates(page, `${theme} ${NARROW.width}`);
+    expectBaselineNotStale();
   });
 }
