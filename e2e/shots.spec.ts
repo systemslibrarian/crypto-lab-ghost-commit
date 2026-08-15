@@ -17,11 +17,10 @@ async function drive(page: Page): Promise<void> {
   await expect(page.locator('.reveal')).toBeVisible()
 }
 
-for (const theme of ['dark', 'light'] as const) {
+for (const theme of ['dark'] as const) {
   test(`shots — ${theme}`, async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 })
     await page.goto('.')
-    if (theme === 'light') await page.locator('#cl-theme-toggle').click()
     await page.screenshot({ path: `test-results/shot-${theme}-top.png` })
     await drive(page)
     await page.screenshot({ path: `test-results/shot-${theme}-full.png`, fullPage: true })

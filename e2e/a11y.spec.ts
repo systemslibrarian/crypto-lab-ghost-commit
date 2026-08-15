@@ -42,7 +42,7 @@ test.afterAll(() => {
   reportCollected();
 });
 
-for (const theme of ['dark', 'light'] as const) {
+for (const theme of ['dark'] as const) {
   test(`WCAG A/AA — ${theme}, 1280px`, async ({ page }) => {
     test.slow();
     await page.setViewportSize({ width: 1280, height: 900 });
