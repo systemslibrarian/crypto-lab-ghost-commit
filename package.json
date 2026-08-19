@@ -14,7 +14,7 @@
     "kat:regen": "node tools/gen-git-kat.ts"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.10.1",
+    "@axe-core/playwright": "^4.13.0",
     "@playwright/test": "^1.61.1",
     "@types/node": "^26.2.0",
     "typescript": "^5.9.2",
