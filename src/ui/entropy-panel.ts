@@ -85,7 +85,9 @@ function verdictBlock(subject: string): HTMLElement {
       el('dt', {}, ['Total']),
       el('dd', {}, [
         `${fmt(verdict.totalBits, 1)} bits `,
-        el('span', { class: 'muted' }, ['(H × length — the figure that bounds guessing effort)']),
+        el('span', { class: 'muted' }, [
+          '(H × length — the total by this character-frequency measure, not a bound on guessing effort; see below)',
+        ]),
       ]),
       el('dt', {}, ['Charset']),
       el('dd', {}, [
