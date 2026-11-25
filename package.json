@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Commit a secret, delete it, and watch git history keep it forever — with real git object hashing and real Shannon-entropy detection, in the browser.",
+  "description": "Commit a secret, delete it, and find the earlier version in reachable git history — with real git object hashing and real Shannon-entropy detection, in the browser.",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",

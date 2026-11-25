@@ -186,20 +186,19 @@
           <div class="intro-grid">
             <div>
               <p>
-                Git never edits a file. Every version of every file you have ever committed is stored
-                whole, as an object named by the hash of its own contents. Committing a change does
-                not replace the old object — it adds a new one and points the newest commit at it.
+                Git represents each committed file version as a blob. Its object ID hashes the Git
+                object header and the file bytes. Committing an edit adds a new version while
+                the earlier commit still points to the original.
               </p>
               <p>
-                That design is what makes git trustworthy: history cannot be quietly altered. It is
-                also what makes a leaked secret permanent. Deleting the line writes a new object; the
-                old one keeps its name, keeps its contents, and stays reachable from the commit that
-                introduced it.
+                Deleting a line changes the current snapshot. A reader who can access the earlier
+                commit can still read the original bytes. If accessible references and copies
+                are removed, an unreachable object can eventually be pruned.
               </p>
               <p>
                 Work through the four panels below and you will commit a credential, fail twice to
-                remove it, watch a scanner find it in seconds, and end up at the only response that
-                actually helps.
+                remove it, watch a scanner find it in seconds, and end up at the provider action that
+                revokes the exposed credential.
               </p>
             </div>
             <aside class="scope-card" aria-labelledby="scope-heading">
@@ -265,9 +264,9 @@
               is not "can I remove it" but "what did it have access to, and has it been used".
             </li>
             <li>
-              <strong>Rewriting history is not erasure.</strong> Forks, existing clones, CI caches,
-              and platform-side dangling objects all keep their copy. On GitHub, an unreferenced
-              commit remains fetchable by SHA.
+              <strong>Rewriting history is not erasure.</strong> Copies in forks, clones, and caches can outlive a
+              branch rewrite. GitHub may retain pull-request references or cached views.
+              Unreachable objects can eventually be pruned.
             </li>
             <li>
               <strong>SHA-1 is used here because git uses it.</strong> It is broken for collision

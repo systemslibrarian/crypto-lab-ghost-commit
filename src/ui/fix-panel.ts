@@ -42,7 +42,7 @@ const REMEDIES: readonly Remedy[] = [
     effect: 'Moves your branch. Does not reach anyone else’s copy.',
     verdict: 'no',
     detail:
-      'Every existing clone, fork, CI cache, and the platform’s own dangling-object storage keeps the commit. On GitHub, an unreferenced commit stays fetchable by its SHA — and forks make it permanent.',
+      'Copies that received the commit can retain it. A fork, pull request, or cached view may still expose it after the branch moves. An unreachable Git object can eventually be pruned.',
   },
   {
     title: 'Rewrite history',
@@ -50,21 +50,21 @@ const REMEDIES: readonly Remedy[] = [
     effect: 'Genuinely rewrites the objects — and every downstream id.',
     verdict: 'partial',
     detail:
-      'Necessary hygiene, not a remedy. It changes every commit id from the rewrite point forward, breaking every clone and every reference to those SHAs — and it still cannot recall what was already fetched, scraped, or indexed.',
+      'Rewriting changes the affected commits and their descendants. Other clones may still have the old history. Coordinate cleanup separately and revoke the exposed credential at its provider.',
   },
   {
     title: 'Rotate the credential',
     command: '(at the provider) revoke, issue a new key',
-    effect: 'Makes the leaked value worthless.',
+    effect: 'Revokes the old credential at the provider.',
     verdict: 'yes',
     detail:
-      'This is the only action that changes the attacker’s position. The string stays in history forever; it simply stops opening anything.',
+      'In this simulation the provider rejects the old value after revocation. The repository still contains the same bytes. Revocation does not undo earlier use.',
   },
 ]
 
 const VERDICT_CHIP: Record<Remedy['verdict'], () => HTMLElement> = {
   no: () => chip('alarm', 'does not fix it'),
-  partial: () => chip('warn', 'helps, not enough'),
+  partial: () => chip('warn', 'history cleanup only'),
   yes: () => chip('safe', 'this is the fix'),
 }
 
@@ -75,7 +75,7 @@ function remedyTable(): HTMLElement {
       el('tr', {}, [
         el('th', { scope: 'col' }, ['Response']),
         el('th', { scope: 'col' }, ['Effect on the repository']),
-        el('th', { scope: 'col' }, ['Does it undo the exposure?']),
+        el('th', { scope: 'col' }, ['Does it revoke the old credential?']),
       ]),
     ]),
     el(
@@ -135,7 +135,7 @@ export function renderFixPanel(store: Store, root: HTMLElement): void {
         el('dd', {}, [
           rotated
             ? 'Identical. Same blob, same commits, same finding.'
-            : 'Rotate and compare — the point is that this line will not change.',
+            : 'Rotate the credential, then compare the blob ID and commit count above.',
         ]),
       ]),
     )

@@ -165,8 +165,7 @@ export async function boot(page: Page, theme: 'dark' | 'light'): Promise<void> {
     await page.evaluate(() => matchMedia('(prefers-reduced-motion: reduce)').matches),
     'reduced-motion emulation must actually be in effect'
   ).toBe(true);
-  // index.html's anti-flash script stamps `data-theme` unconditionally from the
-  // same `theme` key the shared bar's toggle writes, so both themes are stamped.
+  // The fleet header selects the published dark theme before the app mounts.
   await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
 
   // The four interactive panels are rendered from TypeScript into empty shells.
