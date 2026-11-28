@@ -22,7 +22,7 @@ A browser demo of two things that are usually described and rarely shown: how a 
 
 ## Exhibits
 
-1. **The repository.** A six-commit Python billing service you advance one commit at a time. Each step shows the real commit id, tree id, and parent, computed live. A selector switches the whole repository between git's SHA-1 and SHA-256 object formats — the bytes being hashed are identical, only the digest changes.
+1. **The repository.** A six-commit Python billing service you advance one commit at a time. Each step shows the real commit id, tree id, and parent, computed live. A selector switches the whole repository between git's SHA-1 and SHA-256 object formats — the source files have the same bytes in both formats. Tree objects embed object IDs, and commits name a tree and any parents. Changing the ID format therefore also changes the bytes Git hashes for trees and commits.
 2. **The leak, and the two failed fixes.** You commit the key, ship an unrelated feature past it, replace the literal with `os.environ`, and finally `git rm` the file. The object count goes *up* at every step, including the deletions.
 3. **HEAD scan versus history walk.** The same scanner run twice, side by side, differing only in which commits it is handed. HEAD reports clean; the parent-chain walk surfaces the credential with the real blob id and the commits that still reach it.
 4. **The object store, laid bare.** Every object ever written, with the blobs holding the key marked — including the ones HEAD can no longer reach.
